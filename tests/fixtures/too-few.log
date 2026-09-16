@@ -1,0 +1,15 @@
+train.py --config configs/unet-seg.yaml
+loading dataset from ./data/cityscapes
+train samples 2975, val samples 500
+model unet, params 31.0M
+epoch=1 loss=1.8420 val_loss=1.7733 lr=0.0003
+epoch=2 loss=1.4011 val_loss=1.5288 lr=0.0003
+epoch=3 loss=1.2204 val_loss=1.4102 lr=0.0003
+Traceback (most recent call last):
+  File "train.py", line 214, in <module>
+    main()
+  File "train.py", line 188, in main
+    loss.backward()
+  File "torch/_tensor.py", line 581, in backward
+    torch.autograd.backward(self, gradient, retain_graph, create_graph)
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 2.00 GiB

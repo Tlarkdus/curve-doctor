@@ -1,0 +1,17 @@
+run=k17 dataset=tabular-churn note=val split is only 240 rows
+epoch=1 loss=0.6902 val_loss=0.7100 lr=0.001
+epoch=2 loss=0.5541 val_loss=0.5200 lr=0.001
+epoch=3 loss=0.4783 val_loss=0.6800 lr=0.001
+epoch=4 loss=0.4210 val_loss=0.4900 lr=0.001
+epoch=5 loss=0.3766 val_loss=0.6300 lr=0.001
+epoch=6 loss=0.3402 val_loss=0.4400 lr=0.001
+epoch=7 loss=0.3105 val_loss=0.5900 lr=0.001
+epoch=8 loss=0.2854 val_loss=0.4700 lr=0.001
+epoch=9 loss=0.2641 val_loss=0.6100 lr=0.001
+epoch=10 loss=0.2455 val_loss=0.4200 lr=0.001
+epoch=11 loss=0.2292 val_loss=0.5500 lr=0.001
+epoch=12 loss=0.2148 val_loss=0.3900 lr=0.001
+epoch=13 loss=0.2019 val_loss=0.5200 lr=0.001
+epoch=14 loss=0.1903 val_loss=0.3700 lr=0.001
+epoch=15 loss=0.1798 val_loss=0.4800 lr=0.001
+epoch=16 loss=0.1702 val_loss=0.3400 lr=0.001

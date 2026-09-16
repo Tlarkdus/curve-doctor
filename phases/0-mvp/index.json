@@ -29,10 +29,10 @@
     {
       "step": 3,
       "name": "samples",
-      "status": "pending",
-      "started_at": null,
-      "completed_at": null,
-      "summary": ""
+      "status": "completed",
+      "started_at": "2026-09-16T06:47:00.000Z",
+      "completed_at": "2026-09-16T06:47:00.000Z",
+      "summary": "tests/fixtures/ 로그 샘플 6종(diverge/overfit keras 15~18 epoch, underfit/plateau csv 16행, noisy/too-few kv) + tests/samples.test.js. 각 샘플을 parseLog->diagnose로 돌려 format 일치, epochs.length>0, 기대 code 포함을 확인하고 diverge/too-few는 Finding 정확히 1개를 확인. 6종 모두 의도한 code 하나만 나온다(공존 findings 0). 파일 읽기는 이 테스트에서만 node:fs를 쓰고 src/와 임계값은 수정하지 않았다 - 전체 49/49 pass(PRD 합격선 6/6). 발견한 파서 한계: Keras 실제 2줄 출력의 진행바 줄(\"469/469 [====] - 3s 5ms/step - loss: 0.69\")은 extractPairs의 이름 패턴이 공백/하이픈을 삼켜 loss가 step_loss로 잡힌다. PRD에 문서화된 1줄 형태는 정상이라 샘플은 1줄 형태로 썼고 src/는 고치지 않았다(사람 판단 대기)"
     },
     {
       "step": 4,

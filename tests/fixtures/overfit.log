@@ -1,0 +1,20 @@
+2026-09-14 23:41:02 | bert-base finetune on sst2 | lr 3e-05, batch 32
+Epoch 1/18 - loss: 0.6800 - val_loss: 0.6600
+Epoch 2/18 - loss: 0.5200 - val_loss: 0.5100
+Epoch 3/18 - loss: 0.4100 - val_loss: 0.4200
+Epoch 4/18 - loss: 0.3300 - val_loss: 0.3600
+Epoch 5/18 - loss: 0.2700 - val_loss: 0.3200
+Epoch 6/18 - loss: 0.2200 - val_loss: 0.3000
+Epoch 7/18 - loss: 0.1800 - val_loss: 0.2900
+Epoch 8/18 - loss: 0.1400 - val_loss: 0.2850
+Epoch 9/18 - loss: 0.1100 - val_loss: 0.2910
+Epoch 10/18 - loss: 0.0880 - val_loss: 0.3050
+Epoch 11/18 - loss: 0.0700 - val_loss: 0.3220
+Epoch 12/18 - loss: 0.0550 - val_loss: 0.3480
+Epoch 13/18 - loss: 0.0420 - val_loss: 0.3710
+Epoch 14/18 - loss: 0.0330 - val_loss: 0.3990
+Epoch 15/18 - loss: 0.0250 - val_loss: 0.4320
+Epoch 16/18 - loss: 0.0190 - val_loss: 0.4610
+Epoch 17/18 - loss: 0.0140 - val_loss: 0.4950
+Epoch 18/18 - loss: 0.0100 - val_loss: 0.5280
+done in 41m 12s
