@@ -13,10 +13,10 @@
     {
       "step": 1,
       "name": "parser",
-      "status": "pending",
-      "started_at": null,
-      "completed_at": null,
-      "summary": ""
+      "status": "completed",
+      "started_at": "2026-09-16T06:35:21.803Z",
+      "completed_at": "2026-09-16T06:35:21.803Z",
+      "summary": "src/parse.js — parseLog(text)->{epochs,skipped,truncated,format}, lastRun(epochs). 포맷 3종(keras: 헤더 다음 줄 metric 포함 / csv: epoch 컬럼 후보 4종, 없으면 행 순서 / kv)을 각각 읽어 가장 많이 읽어낸 쪽을 채택. 이름 정규화(valid_/vl/v_ -> val_), NaN·±Infinity는 그대로 담고 숫자로 못 읽으면 키 자체를 넣지 않음, epoch 감소 시 run 증가·동일 epoch은 나중 값 우선, 보간 없음, 상한 초과 시 truncated. 예외를 던지지 않는다. tests/parse.test.js 21케이스(포맷 3종 + PRD Edge 전 항목 + lastRun 3) — 전체 24/24 pass. RED 확인 후 구현했고, 실패한 1건은 테스트 기댓값 오류(중복 epoch은 같은 run)여서 기댓값을 정정"
     },
     {
       "step": 2,
