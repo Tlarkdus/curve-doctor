@@ -37,12 +37,12 @@
     {
       "step": 4,
       "name": "format-ui",
-      "status": "pending",
-      "started_at": null,
-      "completed_at": null,
-      "summary": ""
+      "status": "completed",
+      "started_at": "2026-09-16T06:50:06.678Z",
+      "completed_at": "2026-09-16T06:50:06.678Z",
+      "summary": "src/format.js — toRows(parseResult,findings)->{summary:[[label,value]],findings:[[severity,code,epoch,detail,action]]}. lastRun()만 import하고 모든 셀을 String()으로 만든다(toLocaleString 금지). truncated가 false면 잘림 행을 넣지 않고, findings는 diagnose가 정한 순서 그대로 매핑만 한다. tests/format.test.js 4케이스(정상 5열·순서 유지 / 빈 findings / truncated 유무 2종) RED 확인 후 구현. index.html — textarea+버튼+표 2장, ./src/의 세 모듈을 직접 import해 parseLog->diagnose->toRows->표 그리기만 한다. 계산식·판정 문구 없음(빈 findings일 때의 \"감지된 문제 없음\"만 화면 표시), fetch/localStorage/CDN 0, textContent로만 그려 XSS 없음. 전체 53/53 pass. 브라우저 실행은 비대화형 세션이라 못 열었고, overfit.log를 같은 모듈 체인에 통과시켜 OVERFITTING 행이 나오는 것을 node로 확인"
     }
   ],
   "created_at": "2026-09-16T06:33:23.692Z",
-  "completed_at": null
+  "completed_at": "2026-09-16T06:50:06.678Z"
 }

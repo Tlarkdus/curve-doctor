@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>curve-doctor</title>
+<style>
+  body { font-family: system-ui, sans-serif; max-width: 60rem; margin: 2rem auto; padding: 0 1rem; }
+  textarea { width: 100%; height: 14rem; font-family: monospace; }
+  table { border-collapse: collapse; width: 100%; margin-top: 1rem; }
+  th, td { border: 1px solid #ccc; padding: 0.3rem 0.5rem; text-align: left; vertical-align: top; }
+  th { background: #f4f4f4; }
+  p.note { color: #666; }
+</style>
+</head>
+<body>
+<h1>curve-doctor</h1>
+<p>학습 로그를 붙여넣고 진단 버튼을 누르세요. 입력은 이 페이지 밖으로 나가지 않습니다.</p>
+<textarea id="log" placeholder="Epoch 3/50 - loss: 0.69 - val_loss: 0.68"></textarea>
+<p><button id="run">진단</button></p>
+
+<h2>파싱 요약</h2>
+<table id="summary"></table>
+
+<h2>진단</h2>
+<p class="note" id="empty" hidden>감지된 문제 없음</p>
+<table id="findings"></table>
+
+<script type="module">
+import { parseLog } from './src/parse.js';
+import { diagnose } from './src/diagnose.js';
+import { toRows } from './src/format.js';
+
+function draw(table, headers, rows) {
+  table.replaceChildren();
+  const head = table.insertRow();
+  for (const h of headers) {
+    const th = document.createElement('th');
+    th.textContent = h;
+    head.append(th);
+  }
+  for (const row of rows) {
+    const tr = table.insertRow();
+    for (const cell of row) tr.insertCell().textContent = cell;
+  }
+}
+
+document.getElementById('run').addEventListener('click', () => {
+  const parsed = parseLog(document.getElementById('log').value);
+  const rows = toRows(parsed, diagnose(parsed.epochs));
+  draw(document.getElementById('summary'), ['항목', '값'], rows.summary);
+  draw(document.getElementById('findings'), ['심각도', 'code', 'epoch', '근거', '조치'], rows.findings);
+  document.getElementById('empty').hidden = rows.findings.length > 0;
+  document.getElementById('findings').hidden = rows.findings.length === 0;
+});
+</script>
+</body>
+</html>
