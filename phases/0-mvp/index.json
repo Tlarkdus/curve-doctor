@@ -5,10 +5,10 @@
     {
       "step": 0,
       "name": "setup-thresholds",
-      "status": "pending",
-      "started_at": null,
-      "completed_at": null,
-      "summary": ""
+      "status": "completed",
+      "started_at": "2026-09-16T06:33:23.692Z",
+      "completed_at": "2026-09-16T06:33:23.692Z",
+      "summary": "src/thresholds.js — FINDING_CODES(6), T(임계 10종), SEVERITY, ACTIONS, FINDING_ORDER export. import 0, 함수 0의 순수 데이터. tests/thresholds.test.js 4케이스(키 집합 일치·빈 action 없음·ORDER 부분집합이고 단독반환 2종 제외·임계값 유한수) 통과. package.json test 스크립트를 node --test로 수정(node 24에서 --test tests/ 가 디렉터리를 모듈로 해석해 실패)"
     },
     {
       "step": 1,
@@ -43,6 +43,6 @@
       "summary": ""
     }
   ],
-  "created_at": null,
+  "created_at": "2026-09-16T06:33:23.692Z",
   "completed_at": null
 }
