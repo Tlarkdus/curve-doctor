@@ -21,10 +21,10 @@
     {
       "step": 2,
       "name": "diagnose",
-      "status": "pending",
-      "started_at": null,
-      "completed_at": null,
-      "summary": ""
+      "status": "completed",
+      "started_at": "2026-09-16T06:42:32.000Z",
+      "completed_at": "2026-09-16T06:42:32.000Z",
+      "summary": "src/diagnose.js — diagnose(epochs)->Finding[]. 내부에서 lastRun()으로 마지막 run만 본다. 판정 순서: MIN_EPOCHS 미달 시 TOO_FEW_EPOCHS 단독 -> DIVERGENCE(비유한 loss 또는 직전 대비 DIVERGE_FACTOR배) 단독 -> FINDING_ORDER 4종을 순서대로, OVERFITTING 성립 시 PLATEAU 생략. metric이 없으면 해당 규칙이 null을 내 조용히 빠진다(val_loss 없으면 val 기반 3종 생략). severity/action은 SEVERITY·ACTIONS 테이블에서만 가져오고 숫자 임계값은 전부 T 참조 — 판정 코드에 숫자 리터럴 없음. tests/diagnose.test.js 19케이스(6종 최소 로그 + 상호배제 3 + val 없음 + 정상 빈 배열 + OVERFIT_RISE 경계 3/2 + lastRun·불변성) — 전체 43/43 pass. RED 확인 후 구현"
     },
     {
       "step": 3,
