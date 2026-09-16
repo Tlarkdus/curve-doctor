@@ -1,0 +1,48 @@
+{
+  "project": "curve-doctor (학습곡선 진단기)",
+  "phase": "0-mvp",
+  "steps": [
+    {
+      "step": 0,
+      "name": "setup-thresholds",
+      "status": "pending",
+      "started_at": null,
+      "completed_at": null,
+      "summary": ""
+    },
+    {
+      "step": 1,
+      "name": "parser",
+      "status": "pending",
+      "started_at": null,
+      "completed_at": null,
+      "summary": ""
+    },
+    {
+      "step": 2,
+      "name": "diagnose",
+      "status": "pending",
+      "started_at": null,
+      "completed_at": null,
+      "summary": ""
+    },
+    {
+      "step": 3,
+      "name": "samples",
+      "status": "pending",
+      "started_at": null,
+      "completed_at": null,
+      "summary": ""
+    },
+    {
+      "step": 4,
+      "name": "format-ui",
+      "status": "pending",
+      "started_at": null,
+      "completed_at": null,
+      "summary": ""
+    }
+  ],
+  "created_at": null,
+  "completed_at": null
+}
