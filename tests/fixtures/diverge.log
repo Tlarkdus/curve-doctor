@@ -1,0 +1,17 @@
+2026-09-14 02:03:11 | resnet18/cifar10 | lr 0.05, batch 64, sgd momentum 0.9
+Epoch 1/40 - loss: 0.6931 - val_loss: 0.6902 - acc: 0.5121
+Epoch 2/40 - loss: 0.6120 - val_loss: 0.6301 - acc: 0.6433
+Epoch 3/40 - loss: 0.5433 - val_loss: 0.5810 - acc: 0.7012
+Epoch 4/40 - loss: 0.4998 - val_loss: 0.5622 - acc: 0.7448
+Epoch 5/40 - loss: 0.4710 - val_loss: 0.5501 - acc: 0.7690
+Epoch 6/40 - loss: 0.5382 - val_loss: 0.6014 - acc: 0.7203
+Epoch 7/40 - loss: 0.7128 - val_loss: 0.7903 - acc: 0.6288
+Epoch 8/40 - loss: 1.4022 - val_loss: 1.5510 - acc: 0.5104
+Epoch 9/40 - loss: 4.8871 - val_loss: 5.2013 - acc: 0.3902
+Epoch 10/40 - loss: 62.4410 - val_loss: 70.1122 - acc: 0.1988
+Epoch 11/40 - loss: 1841.2044 - val_loss: 2003.4410 - acc: 0.1002
+Epoch 12/40 - loss: 92104.5100 - val_loss: 101233.7000 - acc: 0.1000
+Epoch 13/40 - loss: 4.8812e+06 - val_loss: 5.1023e+06 - acc: 0.1000
+Epoch 14/40 - loss: inf - val_loss: inf - acc: 0.1000
+Epoch 15/40 - loss: nan - val_loss: nan - acc: 0.1000
+training stopped by user after epoch 15

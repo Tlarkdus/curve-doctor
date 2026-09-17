@@ -21,28 +21,28 @@
     {
       "step": 2,
       "name": "diagnose",
-      "status": "pending",
-      "started_at": null,
-      "completed_at": null,
-      "summary": ""
+      "status": "completed",
+      "started_at": "2026-09-16T06:42:32.000Z",
+      "completed_at": "2026-09-16T06:42:32.000Z",
+      "summary": "src/diagnose.js — diagnose(epochs)->Finding[]. 내부에서 lastRun()으로 마지막 run만 본다. 판정 순서: MIN_EPOCHS 미달 시 TOO_FEW_EPOCHS 단독 -> DIVERGENCE(비유한 loss 또는 직전 대비 DIVERGE_FACTOR배) 단독 -> FINDING_ORDER 4종을 순서대로, OVERFITTING 성립 시 PLATEAU 생략. metric이 없으면 해당 규칙이 null을 내 조용히 빠진다(val_loss 없으면 val 기반 3종 생략). severity/action은 SEVERITY·ACTIONS 테이블에서만 가져오고 숫자 임계값은 전부 T 참조 — 판정 코드에 숫자 리터럴 없음. tests/diagnose.test.js 19케이스(6종 최소 로그 + 상호배제 3 + val 없음 + 정상 빈 배열 + OVERFIT_RISE 경계 3/2 + lastRun·불변성) — 전체 43/43 pass. RED 확인 후 구현"
     },
     {
       "step": 3,
       "name": "samples",
-      "status": "pending",
-      "started_at": null,
-      "completed_at": null,
-      "summary": ""
+      "status": "completed",
+      "started_at": "2026-09-16T06:47:00.000Z",
+      "completed_at": "2026-09-16T06:47:00.000Z",
+      "summary": "tests/fixtures/ 로그 샘플 6종(diverge/overfit keras 15~18 epoch, underfit/plateau csv 16행, noisy/too-few kv) + tests/samples.test.js. 각 샘플을 parseLog->diagnose로 돌려 format 일치, epochs.length>0, 기대 code 포함을 확인하고 diverge/too-few는 Finding 정확히 1개를 확인. 6종 모두 의도한 code 하나만 나온다(공존 findings 0). 파일 읽기는 이 테스트에서만 node:fs를 쓰고 src/와 임계값은 수정하지 않았다 - 전체 49/49 pass(PRD 합격선 6/6). 발견한 파서 한계: Keras 실제 2줄 출력의 진행바 줄(\"469/469 [====] - 3s 5ms/step - loss: 0.69\")은 extractPairs의 이름 패턴이 공백/하이픈을 삼켜 loss가 step_loss로 잡힌다. PRD에 문서화된 1줄 형태는 정상이라 샘플은 1줄 형태로 썼고 src/는 고치지 않았다(사람 판단 대기)"
     },
     {
       "step": 4,
       "name": "format-ui",
-      "status": "pending",
-      "started_at": null,
-      "completed_at": null,
-      "summary": ""
+      "status": "completed",
+      "started_at": "2026-09-16T06:50:06.678Z",
+      "completed_at": "2026-09-16T06:50:06.678Z",
+      "summary": "src/format.js — toRows(parseResult,findings)->{summary:[[label,value]],findings:[[severity,code,epoch,detail,action]]}. lastRun()만 import하고 모든 셀을 String()으로 만든다(toLocaleString 금지). truncated가 false면 잘림 행을 넣지 않고, findings는 diagnose가 정한 순서 그대로 매핑만 한다. tests/format.test.js 4케이스(정상 5열·순서 유지 / 빈 findings / truncated 유무 2종) RED 확인 후 구현. index.html — textarea+버튼+표 2장, ./src/의 세 모듈을 직접 import해 parseLog->diagnose->toRows->표 그리기만 한다. 계산식·판정 문구 없음(빈 findings일 때의 \"감지된 문제 없음\"만 화면 표시), fetch/localStorage/CDN 0, textContent로만 그려 XSS 없음. 전체 53/53 pass. 브라우저 실행은 비대화형 세션이라 못 열었고, overfit.log를 같은 모듈 체인에 통과시켜 OVERFITTING 행이 나오는 것을 node로 확인"
     }
   ],
   "created_at": "2026-09-16T06:33:23.692Z",
-  "completed_at": null
+  "completed_at": "2026-09-16T06:50:06.678Z"
 }

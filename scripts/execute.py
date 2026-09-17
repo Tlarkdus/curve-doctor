@@ -16,6 +16,11 @@ import time
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 
+# Windows 콘솔 기본이 cp949라 ✓ 같은 문자에서 UnicodeEncodeError가 난다. 먼저 UTF-8로 돌린다.
+for _s in (sys.stdout, sys.stderr):
+    if hasattr(_s, "reconfigure"):
+        _s.reconfigure(encoding="utf-8", errors="replace")
+
 ROOT = Path(__file__).resolve().parent.parent
 KST = timezone(timedelta(hours=9))
 MAX_RETRIES = 3
@@ -54,7 +59,8 @@ class StepExecutor:
     # --- git ---
 
     def git(self, *args):
-        return subprocess.run(["git", *args], cwd=ROOT, capture_output=True, text=True)
+        return subprocess.run(["git", *args], cwd=ROOT, capture_output=True, text=True,
+                              encoding="utf-8", errors="replace")
 
     def checkout_branch(self):
         branch = f"feat-{self.phase}"
@@ -137,7 +143,8 @@ class StepExecutor:
         prompt = preamble + step_file.read_text(encoding="utf-8")
         r = subprocess.run(
             ["claude", "-p", "--dangerously-skip-permissions", "--output-format", "json", prompt],
-            cwd=ROOT, capture_output=True, text=True, timeout=1800,
+            cwd=ROOT, capture_output=True, text=True,
+            encoding="utf-8", errors="replace", timeout=1800,
         )
         if r.returncode != 0:
             print(f"  WARN: claude 비정상 종료 (code {r.returncode}) {r.stderr[:300]}")
