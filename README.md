@@ -1,5 +1,7 @@
 # curve-doctor
 
+**[바로 써보기 →](https://tlarkdus.github.io/curve-doctor/)**
+
 모델 돌려놓고 잔 사람이, **학습 로그를 붙여넣으면 이 학습이 뭐가 잘못됐는지와 다음 조치 한 개**를 받는다.
 
 ```
