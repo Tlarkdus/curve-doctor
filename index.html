@@ -2,56 +2,188 @@
 <html lang="ko">
 <head>
 <meta charset="utf-8">
-<title>curve-doctor</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>curve-doctor — 학습곡선 진단</title>
+<meta name="description" content="학습 로그를 붙여넣으면 과적합·발산·정체를 찾아 다음 조치를 알려줍니다.">
 <style>
-  body { font-family: system-ui, sans-serif; max-width: 60rem; margin: 2rem auto; padding: 0 1rem; }
-  textarea { width: 100%; height: 14rem; font-family: monospace; }
-  table { border-collapse: collapse; width: 100%; margin-top: 1rem; }
-  th, td { border: 1px solid #ccc; padding: 0.3rem 0.5rem; text-align: left; vertical-align: top; }
-  th { background: #f4f4f4; }
-  p.note { color: #666; }
+  :root {
+    --bg: #f6f7f9; --surface: #ffffff; --ink: #14171c; --muted: #636b78; --line: #e2e5ea;
+    --accent: #3b5bdb; --accent-ink: #ffffff; --code-bg: #f1f3f6;
+    --high: #c92a2a; --high-bg: #fff0f0; --medium: #b35c00; --medium-bg: #fff5e6;
+    --info: #3b5bdb; --info-bg: #eef2ff;
+    --radius: 12px; --shadow: 0 1px 2px rgba(20, 23, 28, .04), 0 4px 16px rgba(20, 23, 28, .04);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0f1115; --surface: #171a20; --ink: #e8eaee; --muted: #9aa3b2; --line: #2a2f38;
+      --accent: #748ffc; --accent-ink: #0f1115; --code-bg: #1e222a;
+      --high: #ff8787; --high-bg: #2c1a1c; --medium: #ffb15c; --medium-bg: #2c2216;
+      --info: #91a7ff; --info-bg: #1c2133; --shadow: none;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font: 15px/1.6 "Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
+  }
+  main { max-width: 72rem; margin: 0 auto; padding: 2.5rem 1rem 4rem; }
+  header { margin-bottom: 2rem; }
+  h1 { margin: 0; font-size: 1.75rem; letter-spacing: -0.02em; }
+  h1 span { color: var(--accent); }
+  .tagline { margin: .35rem 0 0; color: var(--muted); }
+  .privacy { display: inline-block; margin-top: .75rem; padding: .2rem .65rem; border-radius: 999px;
+    background: var(--code-bg); color: var(--muted); font-size: .8rem; }
+
+  .layout { display: grid; gap: 1.25rem; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: start; }
+  @media (max-width: 52rem) { .layout { grid-template-columns: minmax(0, 1fr); } }
+  .panel { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+    box-shadow: var(--shadow); padding: 1.25rem; }
+  .panel h2 { margin: 0 0 .75rem; font-size: .8rem; font-weight: 600; letter-spacing: .06em;
+    text-transform: uppercase; color: var(--muted); }
+
+  textarea {
+    width: 100%; height: 22rem; resize: vertical; padding: .85rem; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--code-bg); color: var(--ink);
+    font: 13px/1.55 ui-monospace, "Cascadia Code", Consolas, monospace;
+  }
+  textarea:focus { outline: 2px solid var(--accent); outline-offset: 1px; border-color: transparent; }
+  .actions { display: flex; gap: .5rem; align-items: center; margin-top: .85rem; flex-wrap: wrap; }
+  button { font: inherit; border-radius: 8px; padding: .55rem 1.1rem; cursor: pointer; border: 1px solid var(--line);
+    background: var(--surface); color: var(--ink); }
+  button.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); font-weight: 600; }
+  button:hover { filter: brightness(.96); }
+  button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .hint { color: var(--muted); font-size: .8rem; margin-left: auto; }
+  kbd { font: 12px ui-monospace, monospace; padding: .05rem .35rem; border: 1px solid var(--line); border-radius: 4px; }
+
+  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(7.5rem, 1fr)); gap: .5rem; margin: 0 0 1.25rem; }
+  .stat { background: var(--code-bg); border-radius: 8px; padding: .6rem .75rem; }
+  .stat dt { font-size: .75rem; color: var(--muted); }
+  .stat dd { margin: .1rem 0 0; font-size: 1.15rem; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .stat.wide { grid-column: 1 / -1; }
+  .stat.wide dd { font-size: .9rem; font-weight: 500; }
+
+  .findings { display: grid; gap: .75rem; }
+  .finding { border: 1px solid var(--line); border-left: 4px solid var(--sev); border-radius: 8px; padding: .9rem 1rem; }
+  .finding[data-sev="high"] { --sev: var(--high); --sev-bg: var(--high-bg); }
+  .finding[data-sev="medium"] { --sev: var(--medium); --sev-bg: var(--medium-bg); }
+  .finding[data-sev="info"] { --sev: var(--info); --sev-bg: var(--info-bg); }
+  .finding-head { display: flex; align-items: center; gap: .5rem; flex-wrap: wrap; }
+  .badge { font-size: .72rem; font-weight: 700; padding: .1rem .5rem; border-radius: 999px;
+    background: var(--sev-bg); color: var(--sev); }
+  .name { font-weight: 700; font-size: 1.05rem; }
+  .code { font: 12px ui-monospace, monospace; color: var(--muted); }
+  .epoch { margin-left: auto; font-size: .8rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .detail { margin: .4rem 0 0; color: var(--muted); font-size: .9rem; }
+  .action { margin: .65rem 0 0; padding: .55rem .75rem; border-radius: 6px; background: var(--sev-bg); font-size: .92rem; }
+  .action b { color: var(--sev); margin-right: .35rem; }
+
+  .empty { text-align: center; color: var(--muted); padding: 3rem 1rem; border: 1px dashed var(--line); border-radius: 8px; }
+  footer { margin-top: 2.5rem; color: var(--muted); font-size: .8rem; text-align: center; }
+  footer a { color: inherit; }
 </style>
 </head>
 <body>
-<h1>curve-doctor</h1>
-<p>학습 로그를 붙여넣고 진단 버튼을 누르세요. 입력은 이 페이지 밖으로 나가지 않습니다.</p>
-<textarea id="log" placeholder="Epoch 3/50 - loss: 0.69 - val_loss: 0.68"></textarea>
-<p><button id="run">진단</button></p>
+<main>
+  <header>
+    <h1>curve<span>-</span>doctor</h1>
+    <p class="tagline">학습 로그를 붙여넣으면 학습곡선에서 뭐가 잘못됐는지와 다음에 할 일 하나를 알려줍니다.</p>
+    <span class="privacy">🔒 입력은 브라우저 안에서만 처리되고 어디로도 전송되지 않습니다</span>
+  </header>
 
-<h2>파싱 요약</h2>
-<table id="summary"></table>
+  <div class="layout">
+    <section class="panel" aria-labelledby="in-title">
+      <h2 id="in-title">학습 로그</h2>
+      <textarea id="log" spellcheck="false" aria-label="학습 로그"
+        placeholder="Epoch 1/50 - loss: 0.92 - val_loss: 0.88&#10;Epoch 2/50 - loss: 0.71 - val_loss: 0.74&#10;…&#10;&#10;Keras 출력, CSV, epoch=3 loss=0.69 형식을 읽습니다."></textarea>
+      <div class="actions">
+        <button class="primary" id="run">진단하기</button>
+        <button id="sample">예시 넣기</button>
+        <span class="hint"><kbd>Ctrl</kbd> + <kbd>Enter</kbd></span>
+      </div>
+    </section>
 
-<h2>진단</h2>
-<p class="note" id="empty" hidden>감지된 문제 없음</p>
-<table id="findings"></table>
+    <section class="panel" aria-labelledby="out-title" aria-live="polite">
+      <h2 id="out-title">진단 결과</h2>
+      <div id="result">
+        <p class="empty">왼쪽에 로그를 붙여넣고 진단하기를 누르세요.</p>
+      </div>
+    </section>
+  </div>
+
+  <footer>
+    규칙 기반 진단 6종 · 의존성 0 · <a href="https://github.com/Tlarkdus/curve-doctor">GitHub</a>
+  </footer>
+</main>
 
 <script type="module">
 import { parseLog } from './src/parse.js';
 import { diagnose } from './src/diagnose.js';
 import { toRows } from './src/format.js';
 
-function draw(table, headers, rows) {
-  table.replaceChildren();
-  const head = table.insertRow();
-  for (const h of headers) {
-    const th = document.createElement('th');
-    th.textContent = h;
-    head.append(th);
+const NAMES = {
+  DIVERGENCE: '발산', OVERFITTING: '과적합', UNDERFITTING: '과소적합',
+  PLATEAU: '정체', NOISY_VAL: '검증 손실 요동', TOO_FEW_EPOCHS: '판정 불가',
+};
+const SEVERITY = { high: '심각', medium: '주의', info: '안내' };
+
+// 과적합 예시: val_loss가 epoch 5에서 바닥을 찍고 다시 오른다
+const SAMPLE = [0.92, 0.71, 0.58, 0.49, 0.42, 0.37, 0.33, 0.30, 0.27, 0.25, 0.23, 0.21]
+  .map((loss, i) => {
+    const val = [0.88, 0.74, 0.65, 0.60, 0.58, 0.59, 0.61, 0.64, 0.68, 0.71, 0.75, 0.79][i];
+    return `Epoch ${i + 1}/12 - loss: ${loss.toFixed(4)} - val_loss: ${val.toFixed(4)}`;
+  }).join('\n');
+
+const el = (tag, cls, text) => {
+  const n = document.createElement(tag);
+  if (cls) n.className = cls;
+  if (text !== undefined) n.textContent = text;
+  return n;
+};
+
+function render(rows) {
+  const out = document.getElementById('result');
+  out.replaceChildren();
+
+  const stats = el('dl', 'stats');
+  for (const [label, value] of rows.summary) {
+    const box = el('div', value.length > 12 ? 'stat wide' : 'stat');
+    box.append(el('dt', '', label), el('dd', '', value));
+    stats.append(box);
   }
-  for (const row of rows) {
-    const tr = table.insertRow();
-    for (const cell of row) tr.insertCell().textContent = cell;
+  out.append(stats);
+
+  if (rows.findings.length === 0) {
+    out.append(el('p', 'empty', '규칙 6종 중 걸린 패턴이 없습니다.'));
+    return;
   }
+  const list = el('div', 'findings');
+  for (const [severity, code, epoch, detail, action] of rows.findings) {
+    const card = el('article', 'finding');
+    card.dataset.sev = severity;
+    const head = el('div', 'finding-head');
+    head.append(
+      el('span', 'badge', SEVERITY[severity] ?? severity),
+      el('span', 'name', NAMES[code] ?? code),
+      el('span', 'code', code),
+      el('span', 'epoch', `epoch ${epoch}`),
+    );
+    const act = el('p', 'action');
+    act.append(el('b', '', '다음 조치'), document.createTextNode(action));
+    card.append(head, el('p', 'detail', detail), act);
+    list.append(card);
+  }
+  out.append(list);
 }
 
-document.getElementById('run').addEventListener('click', () => {
-  const parsed = parseLog(document.getElementById('log').value);
-  const rows = toRows(parsed, diagnose(parsed.epochs));
-  draw(document.getElementById('summary'), ['항목', '값'], rows.summary);
-  draw(document.getElementById('findings'), ['심각도', 'code', 'epoch', '근거', '조치'], rows.findings);
-  document.getElementById('empty').hidden = rows.findings.length > 0;
-  document.getElementById('findings').hidden = rows.findings.length === 0;
-});
+const log = document.getElementById('log');
+const run = () => {
+  const parsed = parseLog(log.value);
+  render(toRows(parsed, diagnose(parsed.epochs)));
+};
+document.getElementById('run').addEventListener('click', run);
+document.getElementById('sample').addEventListener('click', () => { log.value = SAMPLE; run(); });
+log.addEventListener('keydown', (e) => { if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) run(); });
 </script>
 </body>
 </html>
